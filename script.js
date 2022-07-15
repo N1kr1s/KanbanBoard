@@ -2,7 +2,7 @@ const addBtns = document.querySelectorAll('.add-btn:not(.solid)');
 const saveItemBtns = document.querySelectorAll('.solid');
 const addItemContainers = document.querySelectorAll('.add-container');
 const addItems = document.querySelectorAll('.add-item');
-// Item Lists
+// Columns
 const allColumnsUl = document.querySelectorAll('.drag-item-list');
 const backlogList = document.getElementById('backlogList');
 const progressList = document.getElementById('progressList');
@@ -43,17 +43,13 @@ const changeArrayHelper = (nameArray, list) => {
   if (nameArray.length !== list.children.length) {
     nameArray.length = 0;
     for (let item of list.children) {
-      item.innerText !== '' && nameArray.push(item.innerText);
+      nameArray.push(item.innerText);
     }
   }
   // Updating array if you click and updated text(contentEditable)
   for (let i = 0; i < nameArray.length; i++) {
     if (nameArray[i] !== list.children[i].innerText) {
-      if (list.children[i].innerText === '') {
-        nameArray.splice(i, 1);
-      } else {
-        nameArray.splice(i, 1, list.children[i].innerText);
-      }
+      nameArray.splice(i, 1, list.children[i].innerText);
     }
   }
 };
@@ -66,6 +62,7 @@ const arraysSendToLocalStorage = () => {
     completeListArray,
     onHoldListArray,
   ];
+
   const arrayNames = ['backlog', 'progress', 'complete', 'onHold'];
 
   listArrays.forEach((array, idx) => {
@@ -74,7 +71,7 @@ const arraysSendToLocalStorage = () => {
 };
 
 //Arrays now reflect drag and drop changes
-const changeArrays = () => {
+const updateStateArrays = () => {
   changeArrayHelper(backlogListArray, backlogList);
   changeArrayHelper(progressListArray, progressList);
   changeArrayHelper(completeListArray, completeList);
@@ -90,7 +87,7 @@ const drop = (e, column) => {
   const parent = allColumnsUl[column];
   parent.appendChild(draggedItem);
 
-  changeArrays();
+  updateStateArrays();
 };
 
 // listeners for dragging functionality
@@ -123,10 +120,11 @@ const createItemEl = (ulToAppend, item) => {
   //Making text editable (if edited synch with arrays of data)
   listEl.contentEditable = true;
   listEl.addEventListener('focusout', (e) => {
-    if (e.target.innerText.length === 0) {
-      e.target.style.display = 'none';
+    if (e.target.innerText.length === 0 || e.target.innerText === '\n') {
+      e.target.remove();
     }
-    changeArrays();
+
+    updateStateArrays();
   });
 
   // Making draggable
@@ -136,24 +134,20 @@ const createItemEl = (ulToAppend, item) => {
   ulToAppend.appendChild(listEl);
 };
 
-// Update Columns in DOM
+// Creating columns based on arrays in localstorage
 const updateDOM = () => {
   // Check localStorage once
   getSavedColumns();
-  arraysSendToLocalStorage();
-  // Backlog Column
+
   backlogListArray.forEach((text) => {
     createItemEl(backlogList, text);
   });
-  // Progress Column
   progressListArray.forEach((text) => {
     createItemEl(progressList, text);
   });
-  // Complete Column
   completeListArray.forEach((text) => {
     createItemEl(completeList, text);
   });
-  // On Hold Column
   onHoldListArray.forEach((text) => {
     createItemEl(onHoldList, text);
   });
@@ -166,7 +160,7 @@ addDragNDropListeners();
 const addText = (text, column) => {
   if (text.length) {
     createItemEl(allColumnsUl[column], text);
-    changeArrays();
+    updateStateArrays();
   }
   addItems[column].innerText = '';
 };

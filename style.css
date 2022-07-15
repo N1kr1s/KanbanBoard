@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 html {
   box-sizing: border-box;
@@ -18,7 +18,7 @@ body {
   background-position: 50% 60%;
   background-attachment: fixed;
   color: white;
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Roboto', sans-serif;
   overflow-y: hidden;
 }
 
