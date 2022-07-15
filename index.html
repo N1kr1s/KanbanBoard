@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Drag and Drop Board</title>
+  </head>
+  <body>
+    <h1 class="main-title">Kanban Board</h1>
+    <div class="drag-container">
+      <ul class="drag-list">
+        <li class="drag-column backlog-column">
+          <span class="header">
+            <h1>Backlog</h1>
+          </span>
+          <div id="backlog-content" class="custom-scroll">
+            <!-- !insert tasks in ul-->
+            <ul class="drag-item-list" id="backlogList"></ul>
+          </div>
+          <div class="add-btn-group">
+            <div class="add-btn">
+              <span class="plus-sign">+</span>
+              <span>Add Item</span>
+            </div>
+            <div class="add-btn solid">
+              <span>Save Item</span>
+            </div>
+          </div>
+          <div class="add-container">
+            <div class="add-item" contenteditable="true"></div>
+          </div>
+        </li>
+
+        <li class="drag-column progress-column">
+          <span class="header">
+            <h1>Progress</h1>
+          </span>
+          <div id="progress-content" class="custom-scroll">
+            <!-- !insert tasks in ul-->
+            <ul class="drag-item-list" id="progressList"></ul>
+          </div>
+          <div class="add-btn-group">
+            <div class="add-btn">
+              <span class="plus-sign">+</span>
+              <span>Add Item</span>
+            </div>
+            <div class="add-btn solid">
+              <span>Save Item</span>
+            </div>
+          </div>
+          <div class="add-container">
+            <div class="add-item" contenteditable="true"></div>
+          </div>
+        </li>
+
+        <li class="drag-column complete-column">
+          <span class="header">
+            <h1>Complete</h1>
+          </span>
+          <div id="complete-content" class="custom-scroll">
+            <!-- !insert tasks in ul-->
+            <ul class="drag-item-list" id="completeList"></ul>
+          </div>
+          <div class="add-btn-group">
+            <div class="add-btn">
+              <span class="plus-sign">+</span>
+              <span>Add Item</span>
+            </div>
+            <div class="add-btn solid">
+              <span>Save Item</span>
+            </div>
+          </div>
+          <div class="add-container">
+            <div class="add-item" contenteditable="true"></div>
+          </div>
+        </li>
+
+        <li class="drag-column on-hold-column">
+          <span class="header">
+            <h1>On-hold</h1>
+          </span>
+          <div id="on-hold-content" class="custom-scroll">
+            <!-- !insert tasks in ul-->
+            <ul class="drag-item-list" id="onHoldList"></ul>
+          </div>
+          <div class="add-btn-group">
+            <div class="add-btn">
+              <span class="plus-sign">+</span>
+              <span>Add Item</span>
+            </div>
+            <div class="add-btn solid">
+              <span>Save Item</span>
+            </div>
+          </div>
+          <div class="add-container">
+            <div class="add-item" contenteditable="true"></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+  </body>
+</html>
