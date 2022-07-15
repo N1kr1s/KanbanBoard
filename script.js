@@ -9,10 +9,7 @@ const progressList = document.getElementById('progressList');
 const completeList = document.getElementById('completeList');
 const onHoldList = document.getElementById('onHoldList');
 
-// Items
-loadedFromLocalStorage = false;
-
-// Initialize Arrays
+// State of project
 let backlogListArray = [];
 let progressListArray = [];
 let completeListArray = [];
@@ -45,15 +42,24 @@ const dragLeave = (column) => {
 const changeArrayHelper = (nameArray, list) => {
   if (nameArray.length !== list.children.length) {
     nameArray.length = 0;
-
     for (let item of list.children) {
-      nameArray.push(item.innerText);
+      item.innerText !== '' && nameArray.push(item.innerText);
+    }
+  }
+  // Updating array if you click and updated text(contentEditable)
+  for (let i = 0; i < nameArray.length; i++) {
+    if (nameArray[i] !== list.children[i].innerText) {
+      if (list.children[i].innerText === '') {
+        nameArray.splice(i, 1);
+      } else {
+        nameArray.splice(i, 1, list.children[i].innerText);
+      }
     }
   }
 };
 
 // Set localStorage Arrays
-const updateSavedColumns = () => {
+const arraysSendToLocalStorage = () => {
   listArrays = [
     backlogListArray,
     progressListArray,
@@ -73,7 +79,7 @@ const changeArrays = () => {
   changeArrayHelper(progressListArray, progressList);
   changeArrayHelper(completeListArray, completeList);
   changeArrayHelper(onHoldListArray, onHoldList);
-  updateSavedColumns();
+  arraysSendToLocalStorage();
 };
 
 // Dropping item
@@ -104,11 +110,6 @@ const getSavedColumns = () => {
     progressListArray = JSON.parse(localStorage.progressItems);
     completeListArray = JSON.parse(localStorage.completeItems);
     onHoldListArray = JSON.parse(localStorage.onHoldItems);
-  } else {
-    backlogListArray = ['Release the course', 'Sit back and relax'];
-    progressListArray = ['Work on projects', 'Listen to music'];
-    completeListArray = ['Being cool', 'Getting stuff done'];
-    onHoldListArray = ['Being uncool'];
   }
 };
 
@@ -118,6 +119,16 @@ const createItemEl = (ulToAppend, item) => {
   const listEl = document.createElement('li');
   listEl.classList.add('drag-item');
   listEl.innerText = item;
+
+  //Making text editable (if edited synch with arrays of data)
+  listEl.contentEditable = true;
+  listEl.addEventListener('focusout', (e) => {
+    if (e.target.innerText.length === 0) {
+      e.target.style.display = 'none';
+    }
+    changeArrays();
+  });
+
   // Making draggable
   listEl.draggable = true;
   listEl.addEventListener('dragstart', drag);
@@ -128,25 +139,24 @@ const createItemEl = (ulToAppend, item) => {
 // Update Columns in DOM
 const updateDOM = () => {
   // Check localStorage once
-  !loadedFromLocalStorage && getSavedColumns();
-  updateSavedColumns();
+  getSavedColumns();
+  arraysSendToLocalStorage();
   // Backlog Column
-  backlogListArray.forEach((item) => {
-    createItemEl(backlogList, item);
+  backlogListArray.forEach((text) => {
+    createItemEl(backlogList, text);
   });
   // Progress Column
-  progressListArray.forEach((item) => {
-    createItemEl(progressList, item);
+  progressListArray.forEach((text) => {
+    createItemEl(progressList, text);
   });
   // Complete Column
-  completeListArray.forEach((item) => {
-    createItemEl(completeList, item);
+  completeListArray.forEach((text) => {
+    createItemEl(completeList, text);
   });
   // On Hold Column
-  onHoldListArray.forEach((item) => {
-    createItemEl(onHoldList, item);
+  onHoldListArray.forEach((text) => {
+    createItemEl(onHoldList, text);
   });
-  loadedFromLocalStorage = true;
 };
 
 updateDOM();
